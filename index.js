@@ -56,5 +56,7 @@ form.addEventListener('submit',function(event){
 
        guestInput.value = "";
 
-    } 
+    } else {
+        alert("Please insert an input to submit")
+    }
 })

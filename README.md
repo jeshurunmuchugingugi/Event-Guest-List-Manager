@@ -1,4 +1,164 @@
 # Event-Guest-List-Manager
+
+
+# Guest List Manager
+
+A simple and interactive web application for managing a guest list. Users can add guests by name, mark their attendance status, and remove them from the list. The app also timestamps when guests are added.
+
+---
+
+## Features
+
+- Add guest names through an input form.
+- Display a list of guests with options to:
+  - Mark attendance status (`Attend` / `Not Attend`).
+  - Remove guests from the list.
+- Show the time each guest was added.
+- Guest names longer than 20 characters are truncated with an ellipsis (`....`).
+- Alerts the user if the guest count exceeds 10.
+
+---
+
+## Technology Stack
+
+- **HTML**: Structure and layout of the guest list manager.
+- **CSS** (via `style.css`): Styling and UI design (linked externally).
+- **JavaScript** (via `index.js`): Handles user interactions, DOM manipulation, and dynamic guest management.
+
+---
+
+## File Structure
+
+```
+
+/guest-list-manager
+│
+├── index.html       # Main HTML page
+├── style.css        # CSS styles
+└── index.js         # JavaScript logic for guest management
+
+```
+
+---
+
+## Usage Instructions
+
+1. Open `index.html` in a modern web browser.
+2. Type a guest’s name into the input field.
+3. Click **Add** or press Enter to add the guest to the list.
+4. Use the **Attend** button to toggle attendance status.
+5. Use the **Remove** button to delete a guest from the list.
+6. Be mindful that adding more than 10 guests triggers an alert.
+
+---
+
+## How It Works (Summary)
+
+- The form submission is handled via JavaScript to prevent page reload.
+- New guests are added dynamically to the guest list (`<ul>`).
+- Each guest entry shows their name (truncated if needed) and the time they were added.
+- Buttons for marking attendance and removal are created dynamically for each guest.
+
+---
+
+## Future Enhancements
+
+- Persist guest list data between page reloads using `localStorage`.
+- Add validation to prevent duplicate guest names.
+- Improve UI responsiveness for mobile devices.
+- Include sorting or filtering options for guests.
+
+---
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+*Created by Jeshurn Muchugi*
+``
+
+---
+# Guest List Manager - JavaScript Functionality
+
+This JavaScript file powers a **Guest List Manager** application that allows users to add, track, and manage guest names with timestamp, attendance toggling, and removal functionality.
+
+---
+
+## Features
+
+- ✅ Add a guest with a name input.
+- ⏰ Display the time the guest was added.
+- ✂️ Truncate names longer than 20 characters and append ellipsis (`....`).
+- 🔄 Toggle attendance status (between `Attend` and `Not Attend`).
+- ❌ Remove a guest from the list.
+- ⚠️ Alert the user if more than 10 guests are added.
+
+---
+
+## How It Works
+
+### DOM Elements Accessed
+
+- `#guest-form`: The form where users type and submit guest names.
+- `#guest-input`: Text input where users type a guest name.
+- `#add-guest`: The button to submit the guest.
+- `#guest-list`: The container (`<ul>`) where all guest entries appear.
+
+### Main Logic Flow
+
+1. **Form Submission:**
+   - Prevents the default form behavior.
+   - Trims the entered guest name.
+
+2. **Guest Name Handling:**
+   - If the name is longer than 20 characters, it is truncated and appended with `'....'`.
+   - A new `<li>` element is created and appended to the guest list.
+
+3. **Timestamp Generation:**
+   - Captures the current time using `toLocaleTimeString()` and displays it next to the guest's name.
+
+4. **Buttons Created Per Guest:**
+   - **Attend Button**:
+     - Toggles between `Attend` and `Not Attend`.
+   - **Remove Button**:
+     - Deletes the respective `<li>` from the guest list.
+
+5. **Guest Limit Check:**
+   - If the guest count exceeds 10, the user is alerted.
+
+6. **Cleanup:**
+   - Resets the input field after adding a guest.
+
+---
+
+## Code Snippet Example
+
+```js
+const guestName = guestInput.value.trim();
+if (guestName.length > 20) {
+    li.textContent = guestName.slice(0, 20) + '....';
+} else {
+    li.textContent = guestName;
+}
+
+Requirements
+Browser: Any modern browser supporting vanilla JavaScript
+
+No external libraries required
+
+Potential Improvements
+Store guest data using localStorage or sessionStorage.
+
+Add a confirmation dialog before deleting a guest.
+
+Highlight attending guests visually.
+
+Prevent duplicate guest entries.
+
+
+
 | Element                        | Color Code | Description                                              |
 | ------------------------------ | ---------- | -------------------------------------------------------- |
 | **App Background**             | `#FAF3E0`  | Warm, soft cream – the overall page background           |
@@ -20,119 +180,83 @@
 
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Guest List App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
+``markdown
+# Guest List Manager - CSS Styling
 
-    h1 {
-      text-align: center;
-    }
+This CSS file styles the **Guest List Manager** web application, providing a clean, modern, and user-friendly interface.
 
-    form {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+---
 
-    input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      flex: 1;
-      margin-right: 10px;
-    }
+## Styling Overview
 
-    button {
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+### Global Styles
 
-    ul {
-      list-style: none;
-      padding: 0;
-    }
+- Resets margin, padding, and list styles for all elements (`*` selector).
+- Removes default text alignment to maintain consistent layout control.
 
-    li {
-      background: #fff;
-      padding: 10px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #ccc;
-    }
+### Body
 
-    .actions button {
-      margin-left: 5px;
-    }
-  </style>
-</head>
-<body>
+- Background color set to a warm yellow shade (`#ffda74`) for a cheerful and inviting feel.
 
-  <h1>Guest List</h1>
+### Guest List Container (`#guest-list-manager`)
 
-  <form id="guestForm">
-    <input type="text" id="guestName" placeholder="Enter guest name" required />
-    <button type="submit">Add Guest</button>
-  </form>
+- White background with rounded corners (`border-radius: 20px`).
+- Fixed width using viewport height (`100vh`) for vertical consistency.
+- Padding applied generously (`60px 120px`) to give content breathing room.
+- Centered horizontally with margin and uses flexbox alignment (`align-items: start`, `justify-content: center`).
+- Base font size set to `25px` for readability.
 
-  <ul id="guestList"></ul>
+### Headings (`h1`)
 
-  <script>
-    const form = document.getElementById('guestForm');
-    const guestNameInput = document.getElementById('guestName');
-    const guestList = document.getElementById('guestList');
+- Larger font size (`30px`) and dark gray color (`#333333`).
+- Left-aligned with spacing below for separation.
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const guestName = guestNameInput.value.trim();
+### Forms and List Items (`li`, `form`)
 
-      if (!guestName) return;
+- Use flex display for horizontal layout.
+- Left-aligned text with vertical margin spacing.
 
-      if (guestList.children.length >= 10) {
-        alert('Guest list is full! Limit is 10.');
-        return;
-      }
+### Guest Form (`#guest-form`)
 
-      const li = document.createElement('li');
-      li.textContent = guestName;
+- Flex display with no top margin and small bottom margin for spacing.
+- Input field styled with padding, no border, light gray background (`#e7e5e5`), black text, and rounded left corners (`border-radius: 40px 0 0 40px`).
+- Submit button styled with rounded corners (`border-radius: 40px`), bright yellow background (`#ffbc05`), black bold text, no border, padding for clickable area, slight negative left margin for overlap effect, and smaller font size (`14px`).
 
-      const actionsDiv = document.createElement('div');
-      actionsDiv.classList.add('actions');
+### Guest List Items (`#guest-list li`)
 
-      const removeButton = document.createElement('button');
-      removeButton.textContent = 'Remove';
-      removeButton.addEventListener('click', () => {
-        guestList.removeChild(li);
-      });
+- Medium font size (`20px`), flexbox layout for aligning content.
+- Spaced horizontally with gaps and margin/padding for clarity.
+- Buttons container inside list items (`.buttons`) uses flex layout, spacing, centered alignment, and right margin.
 
-      const rsvpButton = document.createElement('button');
-      rsvpButton.textContent = 'Attending';
-      rsvpButton.addEventListener('click', () => {
-        rsvpButton.textContent =
-          rsvpButton.textContent === 'Attending'
-            ? 'Not Attending'
-            : 'Attending';
-      });
+### Buttons inside Guest List
 
-      actionsDiv.appendChild(rsvpButton);
-      actionsDiv.appendChild(removeButton);
-      li.appendChild(actionsDiv);
+- Default buttons have red background (`#DC3545`), white text, rounded corners (`15px`), no border, padding for comfortable clicking.
+- Attend buttons have distinct blue background (`#5C6BC0`).
+- Buttons are flex containers themselves for centering content.
 
-      guestList.appendChild(li);
-      guestNameInput.value = '';
-    });
-  </script>
+### Timestamp Span (`.makeSmallTime`)
 
-</body>
-</html>
+- Smaller font size (`15px`), flexbox centered text horizontally and vertically.
+
+### Miscellaneous
+
+- Additional flexbox alignment and text centering applied to list items and spans to ensure consistent and neat appearance.
+
+---
+
+## Summary
+
+This CSS provides a bright, clean, and user-friendly UI for managing guest lists with clear visual cues for different interactive elements, using flexbox layouts and consistent spacing.
+
+---
+
+## Suggested Improvements
+
+- Adjust fixed width (`100vh`) for better responsiveness on smaller screens.
+- Add hover/focus styles for buttons and inputs to enhance UX.
+- Include media queries for mobile and tablet viewports.
+
+---
+
+*Created for the Guest List Manager project*
+```
