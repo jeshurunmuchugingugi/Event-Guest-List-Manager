@@ -23,7 +23,7 @@ form.addEventListener('submit',function(event){
         spanTime.classList.add("makeSmallTime")
         const now = new Date();
         const timeOnly = now.toLocaleTimeString(); 
-        spanTime.textContent = ` Added by: ${timeOnly}`;
+        spanTime.textContent = ` Added by: ${now.toLocaleString()}`;
         li.appendChild(spanTime)
 
         const attendButton = document.createElement('button');
